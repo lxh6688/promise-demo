@@ -18,8 +18,13 @@ function Promise(executor){
     self.PromiseResult = data
   }
 
-  //同步调用 [执行器函数]
-  executor(resolve,reject)
+  try{
+    //同步调用 [执行器函数]
+    executor(resolve,reject)
+  }catch(e){
+    // 修改 promise 对象状态为 失败
+    reject(e)
+  }
 }
 
 //添加 then 方法
