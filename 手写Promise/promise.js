@@ -40,18 +40,30 @@ function Promise(executor){
 
 //添加 then 方法
 Promise.prototype.then = function(onResolved, onRejected){
-  if(this.PromiseState === 'fulfilled'){
-    onResolved(this.PromiseResult)
-  }
-  if(this.PromiseState === 'rejected'){
-    onRejected(this.PromiseResult)
-  }
-  //判断 pending 状态
-  if(this.PromiseState === 'pending'){
-    //保存回调函数
-    this.callback.push({
-      onResolved,
-      onRejected
-    })
-  }
+  return new Promise((resolve,reject) => {
+    if(this.PromiseState === 'fulfilled'){
+      let result = onResolved(this.PromiseResult)
+      if(result instanceof Promise){
+        result.then(v => {
+          resolve(v)
+        }, r => {
+          reject(r)
+        })
+      }else {
+        //结果的对象状态为 成功
+        resolve(result)
+      }
+    }
+    if(this.PromiseState === 'rejected'){
+      onRejected(this.PromiseResult)
+    }
+    //判断 pending 状态
+    if(this.PromiseState === 'pending'){
+      //保存回调函数
+      this.callback.push({
+        onResolved,
+        onRejected
+      })
+    }
+  })
 }
