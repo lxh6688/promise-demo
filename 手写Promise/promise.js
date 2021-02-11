@@ -40,6 +40,7 @@ function Promise(executor){
 
 //添加 then 方法
 Promise.prototype.then = function(onResolved, onRejected){
+  const self = this
   return new Promise((resolve,reject) => {
     if(this.PromiseState === 'fulfilled'){
       let result = onResolved(this.PromiseResult)
@@ -61,8 +62,38 @@ Promise.prototype.then = function(onResolved, onRejected){
     if(this.PromiseState === 'pending'){
       //保存回调函数
       this.callback.push({
-        onResolved,
-        onRejected
+        onResolved:function(){
+          try{
+            let result = onResolved(self.PromiseResult)
+            if(result instanceof Promise){
+              result.then(v => {
+                resolve(v)
+              }, r => {
+                reject(r)
+              })
+            }else {
+              resolve(result)
+            }
+          }catch(e){
+            reject(e)
+          }
+        },
+        onRejected:function(){
+          try{
+            let result = onRejected(self.PromiseResult)
+            if(result instanceof Promise){
+              result.then(v => {
+                resolve(v)
+              }, r => {
+                reject(r)
+              })
+            }else {
+              resolve(result)
+            }
+          }catch(e){
+            reject(e)
+          }
+        }
       })
     }
   })
