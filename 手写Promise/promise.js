@@ -42,57 +42,38 @@ function Promise(executor){
 Promise.prototype.then = function(onResolved, onRejected){
   const self = this
   return new Promise((resolve,reject) => {
-    if(this.PromiseState === 'fulfilled'){
-      let result = onResolved(this.PromiseResult)
-      if(result instanceof Promise){
-        result.then(v => {
-          resolve(v)
-        }, r => {
-          reject(r)
-        })
-      }else {
-        //结果的对象状态为 成功
-        resolve(result)
+    //封装函数
+    function callback(type){
+      try{
+        let result = type(self.PromiseResult)
+        if(result instanceof Promise){
+          result.then(v => {
+            resolve(v)
+          }, r => {
+            reject(r)
+          })
+        }else {
+          resolve(result)
+        }
+      }catch(e){
+        reject(e)
       }
     }
+    if(this.PromiseState === 'fulfilled'){
+      callback(onResolved)
+    }
     if(this.PromiseState === 'rejected'){
-      onRejected(this.PromiseResult)
+      callback(onRejected)
     }
     //判断 pending 状态
     if(this.PromiseState === 'pending'){
       //保存回调函数
       this.callback.push({
         onResolved:function(){
-          try{
-            let result = onResolved(self.PromiseResult)
-            if(result instanceof Promise){
-              result.then(v => {
-                resolve(v)
-              }, r => {
-                reject(r)
-              })
-            }else {
-              resolve(result)
-            }
-          }catch(e){
-            reject(e)
-          }
+          callback(onResolved)
         },
         onRejected:function(){
-          try{
-            let result = onRejected(self.PromiseResult)
-            if(result instanceof Promise){
-              result.then(v => {
-                resolve(v)
-              }, r => {
-                reject(r)
-              })
-            }else {
-              resolve(result)
-            }
-          }catch(e){
-            reject(e)
-          }
+          callback(onRejected)
         }
       })
     }
