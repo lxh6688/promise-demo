@@ -31,6 +31,11 @@ function Promise(executor){
 }
 
 //添加 then 方法
-Promise.prototype.then = function(onResolved, onrejected){
-
+Promise.prototype.then = function(onResolved, onRejected){
+  if(this.PromiseState === 'fulfilled'){
+    onResolved(this.PromiseResult)
+  }
+  if(this.PromiseState === 'rejected'){
+    onRejected(this.PromiseResult)
+  }
 }
