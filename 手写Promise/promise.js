@@ -46,6 +46,9 @@ Promise.prototype.then = function(onResolved, onRejected){
       throw reason
     }
   }
+  if(typeof onResolved !== 'function'){
+    onResolved = value => value
+  }
   return new Promise((resolve,reject) => {
     //封装函数
     function callback(type){
