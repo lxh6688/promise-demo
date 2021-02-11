@@ -12,19 +12,15 @@
     let p = new Promise((resolve,reject) => {
       setTimeout(() => {
         // resolve('ok')
-      reject("error")
+        reject("error")
       },1000)
     })
     
 
-    const res = p.then(value => {
-      console.log(value)
-    }, reason => {
+    p.catch(reason => {
       console.warn(reason)
-      throw 'error'
     })
 
-    console.log(res)
   </script>
 </body>
 </html>
