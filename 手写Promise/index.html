@@ -9,15 +9,15 @@
 </head>
 <body>
   <script>
-    const p = Promise.reject('ERROR')
-    const p2 = Promise.reject(new Promise((resolve, reject) => {
+    let p1 = new Promise((resolve,reject) => {
       resolve('ok')
-      // reject('error')
-    }))
+    })
+    let p2 = Promise.resolve('Success')
+    let p3 = Promise.resolve('Oh yeah')
 
-    console.log(p)
-    console.log(p2)
+    let result = Promise.all([p1,p2,p3])
 
+    console.log(result)
   </script>
 </body>
 </html>

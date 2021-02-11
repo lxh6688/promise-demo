@@ -114,3 +114,22 @@ Promise.reject = function(reason){
     reject(reason)
   })
 }
+
+//all 方法
+Promise.all = function(promise){
+  return new Promise((resolve,reject) => {
+    let count = 0
+    let arr = []
+    for(let i = 0;i<promise.length;i++){
+      promise[i].then(v => {
+        count++
+        arr[i] = v
+        if(count === promise.length){
+          resolve(arr)
+        }
+      }, r => {
+        reject(r)
+      })
+    }
+  })
+}
