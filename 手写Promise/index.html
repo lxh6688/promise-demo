@@ -10,18 +10,16 @@
 <body>
   <script>
     let p1 = new Promise((resolve,reject) => {
-      // resolve('ok')
-      reject('error')
-      console.log(111)
+      resolve('ok')
+      // reject('error')
+      // console.log(111)
     })
     
     p1.then(value => {
-      console.log(222)
+      console.log(value)
     }, reason => {
-      console.log(444)
+      console.warn(reason)
     })
-
-    console.log(333)
   </script>
 </body>
 </html>
