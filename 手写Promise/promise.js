@@ -2,6 +2,7 @@
 function Promise(executor){
   this.PromiseState = 'pending'
   this.PromiseResult = null
+  this.callback = {}
 
   const self = this
 
@@ -13,12 +14,19 @@ function Promise(executor){
     self.PromiseState = 'fulfilled' //resolved
     // 2. 设置对象结果值 (promiseResult)
     self.PromiseResult = data
+    // 调用成功的回调函数
+    if(self.callback.onResolved){
+      self.callback.onResolved(data)
+    }
   }
   //reject 函数
   function reject(data){
     if(self.PromiseState !== 'pending') return;
     self.PromiseState = 'rejected'
     self.PromiseResult = data
+    if(self.callback.onRejected){
+      self.callback.onRejected(data)
+    }
   }
 
   try{
@@ -37,5 +45,13 @@ Promise.prototype.then = function(onResolved, onRejected){
   }
   if(this.PromiseState === 'rejected'){
     onRejected(this.PromiseResult)
+  }
+  //判断 pending 状态
+  if(this.PromiseState === 'pending'){
+    //保存回调函数
+    this.callback = {
+      onResolved,
+      onRejected
+    }
   }
 }

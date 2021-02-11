@@ -10,19 +10,20 @@
 <body>
   <script>
     let p = new Promise((resolve,reject) => {
-      resolve('ok')
-      // reject("error")
-      // 抛出异常
-      // throw "error"
+      setTimeout(() => {
+        // resolve('ok')
+      reject("error")
+      })
     })
     
-    console.log(p)
 
     p.then(value => {
       console.log(value)
     }, reason => {
       console.warn(reason)
     })
+
+    console.log(p)
   </script>
 </body>
 </html>
