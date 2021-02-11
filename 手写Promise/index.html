@@ -15,7 +15,7 @@
     let p2 = Promise.resolve('Success')
     let p3 = Promise.resolve('Oh yeah')
 
-    let result = Promise.all([p1,p2,p3])
+    let result = Promise.race([p1,p2,p3])
 
     console.log(result)
   </script>

@@ -133,3 +133,16 @@ Promise.all = function(promise){
     }
   })
 }
+
+//race 方法
+Promise.race = function(promise){
+  return new Promise((resolve,reject) => {
+    for(let i = 0;i<promise.length;i++){
+      promise[i].then(v => {
+        resolve(v)
+      }, r => {
+        reject(r)
+      })
+    }
+  })
+}
