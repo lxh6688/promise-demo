@@ -9,22 +9,14 @@
 </head>
 <body>
   <script>
-    let p = new Promise((resolve,reject) => {
-      setTimeout(() => {
-        resolve('ok')
-        // reject("error")
-      },1000)
-    })
-    
+    const p = Promise.resolve('OK')
+    const p2 = Promise.resolve(new Promise((resolve, reject) => {
+      resolve('success')
+      // reject('error')
+    }))
+    const p3 = Promise.resolve(Promise.resolve('oh yes'))
 
-    p.then()
-    .then(value => {
-      console.log(222)  
-    }).then(value => {
-      console.log(333)
-    }).catch(reason => {
-      console.warn(reason)
-    })
+    console.log(p3)
 
   </script>
 </body>

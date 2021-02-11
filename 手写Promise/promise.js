@@ -88,6 +88,22 @@ Promise.prototype.then = function(onResolved, onRejected){
   })
 }
 
+//catch 方法
 Promise.prototype.catch = function(onRejected){
   return this.then(undefined,onRejected)
+}
+
+//resolve 方法
+Promise.resolve = function(value){
+  return new Promise((resolve,reject) => {
+    if(value instanceof Promise){
+      value.then(v => {
+        resolve(v)
+      }, r => {
+        reject(r)
+      })
+    }else {
+      resolve(value)
+    }
+  })
 }
